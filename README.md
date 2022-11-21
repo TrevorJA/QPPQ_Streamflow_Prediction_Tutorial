@@ -42,7 +42,7 @@ Where $w_i = 1 / d_i^2$ where $d_i$ is the distance from the observation $i$ to 
 
 Finally, the estimated FDC at the ungauged location, $\hat{FDC}_{pred}$, is used to convert the non-exceedance timeseries to streamflow timeseries:
 
-$\hat{FDC_{pred}} : \mathbf{p_{pred}} \to \mathbf{q_{pred}}, \, \mathbf{P} = \set{\mathbf{p}_1, ..., \mathbf{p}_k}$
+$\hat{FDC_{pred}} : \mathbf{p_{pred}} \to \mathbf{q_{pred}}$
 
 Looking at this formulation, and the sequence of transformations that take place, I hope it is clear why the method is rightfully called the *QPPQ method*.
 
