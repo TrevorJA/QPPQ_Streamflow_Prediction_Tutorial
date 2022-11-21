@@ -23,20 +23,32 @@ The QPPQ method is commonly used and encouraged by the USGS, and is described at
 To limit the scope of this tutorial, let's assume that an estimate of the FDC at the target site, $\hat{FDC}_{pred}$, has already been determined through some other statistical or observational study. 
 
 Then the QPPQ method can be described more formally. Given an ungauged location with an estimated FDC, $\hat{FDC}_{pred}$, and set of observed streamflow timeseries $\mathbf{q_i}$ at $K$ neighboring sites, such that:
-$$Q_{obs} = \set{\mathbf{q_1}, \mathbf{q_2}, ..., \mathbf{q_k}}$$
+
+$Q_{obs} = \set{\mathbf{q_1}, \mathbf{q_2}, ..., \mathbf{q_k}}$
+
 With corresponding $K$ FDCs at the observation locations:
-$$FDC_{obs} = \set{FDC_1, FDC_2, ... , FDC_k}$$
+
+$FDC_{obs} = \set{FDC_1, FDC_2, ... , FDC_k}$
+
 The FDCs are used to convert the observed streamflow timeseries, $\mathbf{q_{obs, i}}$, to non-exceedance probability timeseries, $\mathbf{p_{obs, i}}$.
-$$FDC_i : \mathbf{q_{i}} \to \mathbf{p_i}$$
-We can then perform a weighted-aggregation of the non-exceedance probability timeseries to estimate the non-exceedance timeseries at the ungauged location. It is most common to apply an inverse-squared-distance weight to each observed timeseries such that:$$\mathbf{p_{pred}} = \sum^k (\mathbf{p_i}w_i)$$ Where $w_i = 1 / d_i^2$ where $d_i$ is the distance from the observation $i$ to the ungauged location, and $\sum^k w_i = 1$. 
+
+$FDC_i : \mathbf{q_{i}} \to \mathbf{p_i}$
+
+We can then perform a weighted-aggregation of the non-exceedance probability timeseries to estimate the non-exceedance timeseries at the ungauged location. It is most common to apply an inverse-squared-distance weight to each observed timeseries such that:
+
+$\mathbf{p_{pred}} = \sum^k (\mathbf{p_i}w_i)$
+
+Where $w_i = 1 / d_i^2$ where $d_i$ is the distance from the observation $i$ to the ungauged location, and $\sum^k w_i = 1$. 
 
 Finally, the estimated FDC at the ungauged location, $\hat{FDC}_{pred}$, is used to convert the non-exceedance timeseries to streamflow timeseries:
-$$\hat{FDC}_{pred} : \mathbf{p_{pred}} \to \mathbf{q_{pred}}, \, \mathbf{P} = \set{\mathbf{p}_1, ..., \mathbf{p}_k}$$
+
+$\hat{FDC}_{pred} : \mathbf{p_{pred}} \to \mathbf{q_{pred}}, \, \mathbf{P} = \set{\mathbf{p}_1, ..., \mathbf{p}_k}$
+
 Looking at this formulation, and the sequence of transformations that take place, I hope it is clear why the method is rightfully called the *QPPQ method*.
 
 This method is summarized well by the taken from the [USGS Report on the topic](https://pubs.usgs.gov/sir/2015/5157/sir20155157.pdf):
 
-![[QPPQ_Method_Graphic.png]]
+![QPPQ method graphic](https://github.com/TrevorJA/QPPQ_Streamflow_Prediction_Tutorial/blob/main/QPPQ_Method_Graphic.PNG)
 
 In the following section, I step through an implementation of this method in Python.
 
@@ -63,6 +75,7 @@ I collected USGS streamflow data from $N$ gages using the [[HyRiver]]suite for P
 If you would like to learn more about hydro-environmental data acquisition in Python, check out my old post on [*Efficient hydroclimatic data accessing with HyRiver for Python*](https://waterprogramming.wordpress.com/2022/09/20/efficient-hydroclimatic-data-accessing-with-hyriver-for-python/).
 
 The script used to retrieve the data is available [here](https://github.com/TrevorJA/QPPQ_Streamflow_Prediction_Tutorial/blob/main/generate_streamflow_data.py). If you would like to experiment with this method in other regions, you can change the `region` variable on line 21, which specifies the corners of a bounding-box within which gage data will be retrieved:
+
 ```python
 # Specify time-range and region of interest
 dates = ("2000-01-01", "2010-12-31")
@@ -70,13 +83,15 @@ region = (-108.0, 38.0, -105.0, 40.0)
 ```
 Above, I specify a region West of the Rocky Mountains in Colorado. Running the `generate_streamflow_data.py`, I found 73 USGS gage locations (blue circles). 
 
-![[Pasted image 20221121152642.png]]
+
+![Gage locations plotted on a map.](https://github.com/TrevorJA/QPPQ_Streamflow_Prediction_Tutorial/blob/main/gage_location_map.PNG)
 
 #### QPPQ Model
 
 The file `QPPQ.py` contains the method outlined above, defined as the `StreamflowGenerator` class object. 
 
 The `StreamflowGenerator` has four key methods (or functions):
+
 ```python
 class StreamflowGenerator():
     def __init__(self, args):  
@@ -249,13 +264,14 @@ prediction_args = {'prediction_location': test_location,
 predicted_flow = QPPQ_model.predict_streamflow(prediction_args)
 ```
 I made a function, `plot_predicted_and_observed`, which allows for a quick visual check of the predicted timeseries compared to the observed timeseries:
+
 ```python
 from plot_functions import plot_predicted_and_observed
 plot_predicted_and_observed(predicted_flow, test_flow)
 ```
 Which shows some very-nice quality predictions!
 
-![[Pasted image 20221121143752.png]]
+![Comparison of prediction and actual streamflow.](https://github.com/TrevorJA/QPPQ_Streamflow_Prediction_Tutorial/blob/main/output/streamflow_prediction_fig.png)
 
 One benefit of working with the `StreamflowGenerator` as a Python `class` object is that we can retrieve the internal variables for further inspection.  
 

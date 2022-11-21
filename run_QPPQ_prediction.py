@@ -60,12 +60,15 @@ predicted_flow = QPPQ_model.predict_streamflow(prediction_args)
 
 p1 = plot_predicted_and_observed(predicted_flow.flatten(), test_flow.flatten(), yscale = 'linear')
 
+"""
+### Visualize gage locations on a map
+
 import folium
 latlon = gage_locations
 mapit = folium.Map( location=[39, -107], zoom_start=6 )
 for coord in latlon:
     folium.CircleMarker( location=[ coord[0], coord[1] ], fill_color='#43d9de', radius=12 ).add_to( mapit )
 mapit.save( 'map.html')
-
+"""
 
 
