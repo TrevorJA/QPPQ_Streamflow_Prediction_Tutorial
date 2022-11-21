@@ -1,38 +1,35 @@
+"""
+Trevor Amestoy
+Cornell University
+Fall 2022
+
+Collect USGS streamflow data at all locations within a specified region and 
+data range. 
+
+Exports streamflowdata (cms) and location data (long, lat).
+
+"""
+
+
 import numpy as np
 import pandas as pd
 
-import xarray as xr
-import geopandas as gpd
-
 # From the PyNHD library, import data acuistion tools
-import pydaymet as daymet
-import pynhd as pynhd
-from pynhd import NHD
-from pynhd import NLDI, NHDPlusHR, WaterData
-import pygeohydro as gh
-from pygeohydro import NWIS, plot
+from pygeohydro import NWIS
 
 
 #%%#############################################################################
 ### Step 0) Data and specifications
 ################################################################################
 # Specify time-range and region of interest
-dates = ("1999-01-01", "2010-12-31")
-region = (-76.5, 37.5, -74.0, 44.0)
+dates = ("2000-01-01", "2010-12-31")
+region = (-108.0, 38.0, -105.0, 40.0)
 
-# Geo conversion
-crs = 4386
-crs_code = 'epsg:4386'
-
-_ = xr.set_options(display_expand_attrs=False)
 
 #%%#############################################################################
 ### 1. Get flow data
 ################################################################################
 print("Getting flow data from USGS.")
-
-# Initialize waterdata tool
-wd = WaterData("nhdflowline_network")
 
 # Use the national water info system (NWIS)
 nwis = NWIS()
@@ -59,11 +56,10 @@ print(f'All gage data sourced. You have {qobs.shape[1]} gages after cleaning.')
 
 
 #%%#############################################################################
-### 2. Get Location data (long,lat)
+### 2. Get Location data (lat, long)
 ################################################################################
 # Initialize storage
 loc_data = np.zeros((len(qobs.columns), 2))
-loc_data_names = np.array(['long', 'lat'])
 
 # Loop through gage info queried earlier
 for i,st in enumerate(qobs.columns):
@@ -71,7 +67,15 @@ for i,st in enumerate(qobs.columns):
     long = info_box.set_index('site_no').loc[st.split('-')[1]]['dec_long_va']
     lat = info_box.set_index('site_no').loc[st.split('-')[1]]['dec_lat_va']
     # Store
-    loc_data[i,0] = long if len(long.shape) == 0 else long[0]
-    loc_data[i,1] = lat if len(lat.shape) == 0 else lat[0]
+    loc_data[i,0] = lat if len(lat.shape) == 0 else lat[0]
+    loc_data[i,1] = long if len(long.shape) == 0 else long[0]
+    
 
 print("Long and lat data found.")
+
+#%%#############################################################################
+### 3. Export data
+################################################################################
+
+np.savetxt('./data/observed_gage_locations.csv', loc_data, delimiter = ',')
+np.savetxt('./data/observed_streamflow.csv', qobs.T, delimiter = ',')
