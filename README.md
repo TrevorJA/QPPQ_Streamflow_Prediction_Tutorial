@@ -285,8 +285,6 @@ There are numerous methods for estimating FDCs at the ungauged site, including t
 
 Hopefully this tutorial helped to get you familiar with a foundational streamflow prediction method.  
 
-$\hat{FDC}_{pred} : \mathbf{p_{pred}} \to \mathbf{q_{pred}}, \, \mathbf{P} = \set{\mathbf{p}_1, …, \mathbf{p}_k}$
-
 
 ## References
 
