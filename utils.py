@@ -69,10 +69,6 @@ def interpolate_FDC(nep, fdc, quants):
         flow_range = fdc[ind-1:ind+1]
         nep_range = quants[ind-1:ind+1]
 
-
-    #print(f'flow_range: {flow_range}')
-    #print(f'nep_range: {nep_range}')
     slope = (flow_range[1] - flow_range[0])/(nep_range[1] - nep_range[0])
     flow = flow_range[0] + slope*(nep_range[1] - nep)
-
     return flow

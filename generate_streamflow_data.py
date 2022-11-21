@@ -16,11 +16,9 @@ from pygeohydro import NWIS, plot
 #%%#############################################################################
 ### Step 0) Data and specifications
 ################################################################################
-dates = ("1999-01-01", "2020-12-31")
+# Specify time-range and region of interest
 dates = ("1999-01-01", "2010-12-31")
-bbox = (-76.5, 37.5, -74.0, 44.0)
-bbox = (-77.8, 37.5, -74.0, 44.0)  # Expanded on 11/2/22
-nav_dist = 100
+region = (-76.5, 37.5, -74.0, 44.0)
 
 # Geo conversion
 crs = 4386
@@ -39,8 +37,8 @@ wd = WaterData("nhdflowline_network")
 # Use the national water info system (NWIS)
 nwis = NWIS()
 
-# Send a query for all gage info in the bbox
-query = {"bBox": ",".join(f"{b:.06f}" for b in bbox),
+# Send a query for all gage info in the region
+query = {"bBox": ",".join(f"{b:.06f}" for b in region),
         "hasDataTypeCd": "dv",
         "outputDataTypeCd": "dv"}
 
