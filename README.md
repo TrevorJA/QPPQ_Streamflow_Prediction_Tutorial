@@ -1,6 +1,6 @@
 ## Streamflow Predictions in Ungauged Basins
 
-Predicting streamflow at ungauged locations is a classic problem in hydrology which has motivated significant research over the last several decades ([Hrachowitz et al., 2013](Hrachowitz, Markus, et al. "A decade of Predictions in Ungauged Basins (PUB)—a review." _Hydrological sciences journal_ 58.6 (2013): 1198-1255.)).  
+Predicting streamflow at ungauged locations is a classic problem in hydrology which has motivated significant research over the last several decades ([Hrachowitz et al., 2013](https://www.tandfonline.com/doi/full/10.1080/02626667.2013.803183)).  
 
 There are numerous different methods for performing predictions in ungauged basins, but here I focus on the common *QPPQ method*.
 
@@ -70,7 +70,7 @@ Running `pip install -r requirements.txt` from the command line, while inside a 
 
 #### Data retrieval
 
-I collected USGS streamflow data from $N$ gages using the [[HyRiver]]suite for Python. 
+I collected USGS streamflow data from $N$ gages using the HyRiver suite for Python. 
 
 If you would like to learn more about hydro-environmental data acquisition in Python, check out my old post on [*Efficient hydroclimatic data accessing with HyRiver for Python*](https://waterprogramming.wordpress.com/2022/09/20/efficient-hydroclimatic-data-accessing-with-hyriver-for-python/).
 
